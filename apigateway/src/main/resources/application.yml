@@ -1,0 +1,66 @@
+
+# eks 배포시 apigateway는 eureka server 등록하지 않겠다라는 의미
+eureka:
+  client:
+    enabled: false
+
+spring:
+    application:
+        name: api-gateway
+    cloud:
+        gateway:
+        # cores 처리
+        # 각 서비스 모듈은 웹브라우저와 직접 통신하지 않으므로 단일진입점인 gateway 담당
+            globalcors:
+                cors-configurations:
+                    '[/**]':
+                        allowedOrigins:
+                            - 'http://localhost:3000'
+                        allowedMethods: '*'
+                        allowedHeaders: '*'
+                        exposedHeaders: '*'
+                        allowCredentials: true
+
+            # eureka server에 등록된 client 찾아서 사용자의 url_pattern을 매핑하는 작업
+            routes:
+                - id: user-service
+                  predicates:
+                    - Path=/user-service/**
+                  filters:
+                    # 첫번째 접두어를 제거하라는 의미
+                    # browser : http://server.xxxxx.store/user-service/users/signIn
+                    # inner : http://server.xxxxx.store/users/signIn
+                    - StripPrefix=1
+                  uri: http://user-service
+
+                - id: product-service
+                  predicates:
+                    - Path=/product-service/**
+                  filters:
+                    # 첫번째 접두어를 제거하라는 의미
+                    # browser : http://server.xxxxx.store/product-service/product/create
+                    # inner : http://server.xxxxx.store/product/create
+                    - StripPrefix=1
+                  uri: http://product-service
+
+                - id: order-service
+                  predicates:
+                    - Path=/order-service/**
+                  filters:
+                    # 첫번째 접두어를 제거하라는 의미
+                    # browser : http://server.xxxxx.store/order-service/order/create
+                    # inner : http://server.xxxxx.store/order/create
+                    - StripPrefix=1
+                  uri: lb://order-service
+jwt:
+  secret: 0chotona-secret-key-for-jwt-123456789
+
+# eureka client user service -> eureka server
+
+# why? aws 에서는 eureka server -> service 로 대신하기 때문에
+# eureka:
+#     client:
+#         serviceUrl:
+#             defaultZone: http://localhost:8761/eureka
+
+

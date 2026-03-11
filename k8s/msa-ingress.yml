@@ -1,0 +1,30 @@
+
+# aws nlb -> ingress controller(pod) -> ingress -> service -
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/aws/deploy.yaml
+apiVersion: networking.k8s.io/v1
+
+kind: Ingress
+
+metadata:
+  name: order-ingress
+  namespace: lgcns
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    # nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: server.0chotona.store
+    http:
+      paths:
+      # routing 위해서 apigateway를 찾고 해당 서비스에서 실제 라우팅이 발생
+      # http://server.0chotona.store/user-service
+      # http://server.0chotona.store/product-service
+      # http://server.0chotona.store/order-service
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: apigateway-service
+            port:
+              number: 80
