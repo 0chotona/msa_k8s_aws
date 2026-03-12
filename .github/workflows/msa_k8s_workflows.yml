@@ -45,4 +45,50 @@ jobs:
           kubectl apply -f ./k8s/msa-kafka.yml
           kubectl apply -f ./k8s/msa-redis.yml
 
+      # image 생성하고 ecr push까지 자동화
+      # apigateway, user, product, order
+      - name: apigateway image build and push docker image to ecr 
+        env:
+          REGISTRY: 933090817123.dkr.ecr.ap-northeast-2.amazonaws.com
+          REPOSITORY: apigateway
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY/apigateway:$IMAGE_TAG -f Dockerfile .
+          docker push $REGISTRY/$REPOSITORY/apigateway:$IMAGE_TAG
+      - name: eks kubectl apigateway apply
+        run: kubectl apply -f ./apigateway/k8s/apigateway-depl.yml
+
+      - name: user image build and push docker image to ecr 
+        env:
+          REGISTRY: 933090817123.dkr.ecr.ap-northeast-2.amazonaws.com
+          REPOSITORY: user-service
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY/user:$IMAGE_TAG -f Dockerfile .
+          docker push $REGISTRY/$REPOSITORY/user:$IMAGE_TAG
+      - name: eks kubectl user apply
+        run: kubectl apply -f ./user/k8s/user-depl.yml
+
+      - name: product image build and push docker image to ecr 
+        env:
+          REGISTRY: 933090817123.dkr.ecr.ap-northeast-2.amazonaws.com
+          REPOSITORY: product-service
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY/product:$IMAGE_TAG -f Dockerfile .
+          docker push $REGISTRY/$REPOSITORY/product:$IMAGE_TAG
+      - name: eks kubectl product apply
+        run: kubectl apply -f ./product/k8s/product-depl.yml
+
+      - name: order image build and push docker image to ecr 
+        env:
+          REGISTRY: 933090817123.dkr.ecr.ap-northeast-2.amazonaws.com
+          REPOSITORY: order-service
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY/order:$IMAGE_TAG -f Dockerfile .
+          docker push $REGISTRY/$REPOSITORY/order:$IMAGE_TAG
+      - name: eks kubectl order apply
+        run: kubectl apply -f ./order/k8s/order-depl.yml
+
      
