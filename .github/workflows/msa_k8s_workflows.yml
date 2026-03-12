@@ -56,7 +56,9 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY/apigateway:$IMAGE_TAG -f Dockerfile .
           docker push $REGISTRY/$REPOSITORY/apigateway:$IMAGE_TAG
       - name: eks kubectl apigateway apply
-        run: kubectl apply -f ./apigateway/k8s/apigateway-depl.yml
+        run: |
+          kubectl apply -f ./apigateway/k8s/apigateway-depl.yml
+          kubectl rollout restart deployment order-deployment -n lgcns
 
       - name: user image build and push docker image to ecr 
         env:
@@ -67,7 +69,9 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY/user:$IMAGE_TAG -f Dockerfile .
           docker push $REGISTRY/$REPOSITORY/user:$IMAGE_TAG
       - name: eks kubectl user apply
-        run: kubectl apply -f ./user/k8s/user-depl.yml
+        run: |
+          kubectl apply -f ./user/k8s/user-depl.yml
+          kubectl rollout restart deployment order-deployment -n lgcns
 
       - name: product image build and push docker image to ecr 
         env:
@@ -78,7 +82,9 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY/product:$IMAGE_TAG -f Dockerfile .
           docker push $REGISTRY/$REPOSITORY/product:$IMAGE_TAG
       - name: eks kubectl product apply
-        run: kubectl apply -f ./product/k8s/product-depl.yml
+        run: |
+          kubectl apply -f ./product/k8s/product-depl.yml
+          kubectl rollout restart deployment order-deployment -n lgcns
 
       - name: order image build and push docker image to ecr 
         env:
@@ -89,6 +95,8 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY/order:$IMAGE_TAG -f Dockerfile .
           docker push $REGISTRY/$REPOSITORY/order:$IMAGE_TAG
       - name: eks kubectl order apply
-        run: kubectl apply -f ./order/k8s/order-depl.yml
+        run: |
+          kubectl apply -f ./order/k8s/order-depl.yml
+          kubectl rollout restart deployment order-deployment -n lgcns
 
      
