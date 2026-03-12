@@ -31,4 +31,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET }}
           aws-region: ap-northeast-2
 
+      - name: aws eks cluster update
+        run: aws eks update-kubeconfig --region ap-northeast-2 --name lgcns-0chotona-cluster
+
+      - name: aws ecr login
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # infra 구축(ingress, kafka, redis, zookeeper, rabbitMQ)
+      - name: deploy infra
+        run: |
+          kubectl apply -f ./k8s/msa_ingress.yml
+          kubectl apply -f ./k8s/msa_zookeeper.yml
+          kubectl apply -f ./k8s/msa_kafka.yml
+          kubectl apply -f ./k8s/msa_redis.yml
+
      
