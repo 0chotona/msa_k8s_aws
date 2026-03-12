@@ -63,7 +63,7 @@ jobs:
       - name: user image build and push docker image to ecr 
         env:
           REGISTRY: 933090817123.dkr.ecr.ap-northeast-2.amazonaws.com
-          REPOSITORY: user
+          REPOSITORY: user-service
           IMAGE_TAG: latest
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./user/Dockerfile ./user
@@ -76,7 +76,7 @@ jobs:
       - name: product image build and push docker image to ecr 
         env:
           REGISTRY: 933090817123.dkr.ecr.ap-northeast-2.amazonaws.com
-          REPOSITORY: product
+          REPOSITORY: product-service
           IMAGE_TAG: latest
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./product/Dockerfile ./product
@@ -89,7 +89,7 @@ jobs:
       - name: order image build and push docker image to ecr 
         env:
           REGISTRY: 933090817123.dkr.ecr.ap-northeast-2.amazonaws.com
-          REPOSITORY: order
+          REPOSITORY: order-service
           IMAGE_TAG: latest
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./order/Dockerfile ./order
