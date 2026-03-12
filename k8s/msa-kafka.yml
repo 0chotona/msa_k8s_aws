@@ -44,7 +44,7 @@ spec:
             # 내부통신(inside) 
             - name: KAFKA_INTER_BROKER_LISTENER_NAME
               value: INSIDE
-
+---
 apiVersion: v1
 kind: Service
 metadata:
