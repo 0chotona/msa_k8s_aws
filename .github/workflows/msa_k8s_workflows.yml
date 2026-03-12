@@ -98,5 +98,7 @@ jobs:
         run: |
           kubectl apply -f ./order/k8s/order-depl.yml
           kubectl rollout restart deployment order-deployment -n lgcns
-
+          
+      - name: secret
+        run: kubectl create secret generic lgcns-app-secrets --from-literal=DB_HOST=lgcns-0chotona.c92iu2og4xc3.ap-northeast-2.rds.amazonaws.com --from-literal=DB_ADMIN=root --from-literal=DB_PASSWORD=123456789 -n lgcns
      
