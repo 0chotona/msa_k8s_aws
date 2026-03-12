@@ -60,6 +60,7 @@ spring:
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MariaDBDialect
+    generate-ddl: true 
     hibernate: 
     # create, create-drop, update, none
         ddl-auto: create

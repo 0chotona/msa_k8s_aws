@@ -35,7 +35,7 @@ spec:
               memory: "500Mi"
             requests:
               cpu: "0.5"
-              memory: "250Mi"
+              memory: "256Mi"
           # sevret 작성 후 외부환경변수를 이용해서 파드 실행시 주입할 예정
           env:
           - name: DB_HOST
