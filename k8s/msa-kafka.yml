@@ -5,6 +5,10 @@ metadata:
   namespace: lgcns
 
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
   template:
     spec:
       containers:
